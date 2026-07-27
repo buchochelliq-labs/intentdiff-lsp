@@ -1,0 +1,32 @@
+# The native IntentDiff LSP server (#100, A2.5 S3): a standalone binary replacing the
+# pygls `intentdiff lsp-server` — links the PURE-RUST engine (default-features = false)
+# and the generic lsp-client crate's sans-IO codec (the framing is transport-symmetric,
+# so client and server share it). Extracted to its own repo at the split (#82).
+# Standalone package (excluded from the root workspace) so its [patch]/[profile] apply.
+
+[package]
+name = "intentdiff-lsp-server"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "Native IntentDiff LSP server: live semantic-diff diagnostics + code lenses over stdio"
+license = "MIT"
+
+[[bin]]
+name = "intentdiff-lsp-server"
+path = "src/main.rs"
+
+[dependencies]
+intentdiff-rust-core = { git = "https://github.com/buchochelliq-labs/intentdiff-core", tag = "v0.1.0", default-features = false }
+intentdiff-lsp-client = { path = "../lsp-client" }
+serde_json = "1"
+
+[patch.crates-io]
+quote = { path = "../../patches/quote" }
+zmij = { path = "../../patches/zmij" }
+serde_core = { path = "../../patches/serde_core" }
+
+[profile.release]
+opt-level = 3
+codegen-units = 1
+strip = true
