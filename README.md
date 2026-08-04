@@ -1,15 +1,15 @@
-# intentdiff-lsp
+# intentumdiff-lsp
 
-[![CI](https://github.com/buchochelliq-labs/intentdiff-lsp/actions/workflows/ci.yml/badge.svg)](https://github.com/buchochelliq-labs/intentdiff-lsp/actions/workflows/ci.yml)
+[![CI](https://github.com/buchochelliq-labs/intentumdiff-lsp/actions/workflows/ci.yml/badge.svg)](https://github.com/buchochelliq-labs/intentumdiff-lsp/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Rust 1.95](https://img.shields.io/badge/rust-1.95-orange.svg)](https://www.rust-lang.org/)
 
-The **IntentDiff LSP layer** — two standalone crates (side-by-side, mirroring their
+The **IntentumDiff LSP layer** — two standalone crates (side-by-side, mirroring their
 monorepo build shape; each owns its `[patch]` table):
 
-- `crates/lsp-client` — the generic (intentdiff-agnostic) LSP client codec.
-- `crates/lsp-server` — the native `intentdiff-lsp-server` binary: links the engine
-  ([intentdiff-core](https://github.com/buchochelliq-labs/intentdiff-core)) in-process
+- `crates/lsp-client` — the generic (intentumdiff-agnostic) LSP client codec.
+- `crates/lsp-server` — the native `intentumdiff-lsp-server` binary: links the engine
+  ([intentumdiff-core](https://github.com/buchochelliq-labs/intentumdiff-core)) in-process
   plus the client codec.
 
 ## Build
@@ -24,5 +24,5 @@ Toolchain: Rust 1.93.0 (pinned in CI).
 
 ## Provenance
 
-Migrated files-only (no history) from the IntentDiff monorepo
-(`buchochelliq-labs/intentdiff`), which remains the archive of record. License: MIT.
+Migrated files-only (no history) from the IntentumDiff monorepo
+(`buchochelliq-labs/intentumdiff`), which remains the archive of record. License: MIT.

@@ -1,9 +1,9 @@
-//! Native IntentDiff LSP server (#100, A2.5 S3 slice 2 — first cut): stdio transport.
+//! Native IntentumDiff LSP server (#100, A2.5 S3 slice 2 — first cut): stdio transport.
 //!
-//! Replaces the pygls `intentdiff lsp-server` for the editor flow: live semantic-diff
+//! Replaces the pygls `intentumdiff lsp-server` for the editor flow: live semantic-diff
 //! diagnostics (push) + refactoring code lenses (pull) + the custom
-//! `intentdiff/semanticDiff` request, with ZERO Python in the process. The LSP framing is
-//! the `intentdiff-lsp-client` sans-IO codec (transport-symmetric); the compute is the
+//! `intentumdiff/semanticDiff` request, with ZERO Python in the process. The LSP framing is
+//! the `intentumdiff-lsp-client` sans-IO codec (transport-symmetric); the compute is the
 //! core's `live_handle_diff_impl` (config-aware, all-language, guardrails included); the
 //! response shapes are the core's `lsp_server_shapes` mappings (parity-locked against
 //! lsprotocol's encoder).
@@ -22,9 +22,9 @@ use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 use std::sync::mpsc;
 
-use intentdiff_lsp_client::{encode_message, DecodeEvent, FrameDecoder};
-use intentdiff_rust_core::live_server as proto;
-use intentdiff_rust_core::lsp_server_shapes as shapes;
+use intentumdiff_lsp_client::{encode_message, DecodeEvent, FrameDecoder};
+use intentumdiff_rust_core::live_server as proto;
+use intentumdiff_rust_core::lsp_server_shapes as shapes;
 use serde_json::{json, Value};
 
 fn arg_value(args: &[String], flag: &str) -> Option<String> {
@@ -44,7 +44,7 @@ fn resolve_wasm_dir(args: &[String]) -> String {
     if let Some(dir) = arg_value(args, "--wasm-dir") {
         return dir;
     }
-    if let Ok(dir) = std::env::var("INTENTDIFF_WASM_DIR") {
+    if let Ok(dir) = std::env::var("INTENTUMDIFF_WASM_DIR") {
         if !dir.trim().is_empty() {
             return dir;
         }
@@ -56,7 +56,7 @@ fn resolve_wasm_dir(args: &[String]) -> String {
                 return shipped.to_string_lossy().into_owned();
             }
             for ancestor in exe_dir.ancestors() {
-                let dev = ancestor.join("src").join("intentdiff").join("wasm");
+                let dev = ancestor.join("src").join("intentumdiff").join("wasm");
                 if dir_has_manifest(&dev) {
                     return dev.to_string_lossy().into_owned();
                 }
@@ -276,7 +276,7 @@ fn main() {
                                     "textDocumentSync": 1,
                                     "codeLensProvider": {"resolveProvider": false},
                                 },
-                                "serverInfo": {"name": "intentdiff-lsp", "version": "1.0.0"},
+                                "serverInfo": {"name": "intentumdiff-lsp", "version": "1.0.0"},
                             }),
                         );
                     }
@@ -329,7 +329,7 @@ fn main() {
                         respond(&mut out, id, Value::Array(lenses));
                     }
                 }
-                "intentdiff/semanticDiff" => {
+                "intentumdiff/semanticDiff" => {
                     if let Some(id) = id {
                         let result = semantic_diff_request(&mut state, &params);
                         respond(&mut out, id, result);
@@ -401,7 +401,7 @@ fn compute_and_push(state: &mut ServerState, out: &mut impl Write, uri: &str) {
     }
 }
 
-/// The custom `intentdiff/semanticDiff` request: same-URI = live buffer (or on-disk file)
+/// The custom `intentumdiff/semanticDiff` request: same-URI = live buffer (or on-disk file)
 /// vs the ref; different URIs = workspace-contained two-file compare. Errors are in-band
 /// `{"error": …}` objects, exactly like the pygls handler.
 fn semantic_diff_request(state: &mut ServerState, params: &Value) -> Value {
@@ -411,7 +411,7 @@ fn semantic_diff_request(state: &mut ServerState, params: &Value) -> Value {
         return json!({"error": "oldUri and newUri are required"});
     }
     let Some(root) = state.root.clone() else {
-        return json!({"error": "intentdiff/semanticDiff requires a valid workspace root"});
+        return json!({"error": "intentumdiff/semanticDiff requires a valid workspace root"});
     };
     let compute = |state: &ServerState| -> Result<Value, String> {
         if old_uri == new_uri {

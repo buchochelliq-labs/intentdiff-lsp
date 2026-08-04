@@ -1,5 +1,5 @@
 //! The tokio LSP client (#100 S2 slice 2), ported from `AsyncLspClient`
-//! (`src/intentdiff/lsp/client.py`).
+//! (`src/intentumdiff/lsp/client.py`).
 //!
 //! Transport-generic: [`LspClient::connect_io`] takes any `AsyncRead`/`AsyncWrite` pair
 //! (tests use `tokio::io::duplex` — no network); [`LspClient::connect_stdio`] spawns the
@@ -316,7 +316,7 @@ impl LspClient {
                 },
                 "workspace": { "workspaceFolders": true },
             },
-            "clientInfo": {"name": "IntentDiff", "version": "0.1"},
+            "clientInfo": {"name": "IntentumDiff", "version": "0.1"},
         });
         match self.send_request("initialize", params).await {
             Ok(_) => {
@@ -640,7 +640,7 @@ mod tests {
             init["params"]["capabilities"]["textDocument"]["hover"]["contentFormat"],
             json!(["plaintext", "markdown"])
         );
-        assert_eq!(init["params"]["clientInfo"]["name"], "IntentDiff");
+        assert_eq!(init["params"]["clientInfo"]["name"], "IntentumDiff");
         // initialized notification follows, with no id.
         assert_eq!(received[1]["method"], "initialized");
         assert!(received[1].get("id").is_none());
@@ -824,7 +824,7 @@ mod tests {
     #[cfg(windows)]
     #[test]
     fn resolve_command_wraps_cmd_wrappers_in_cmd_exe() {
-        let dir = std::env::temp_dir().join("intentdiff-lsp-client-test");
+        let dir = std::env::temp_dir().join("intentumdiff-lsp-client-test");
         std::fs::create_dir_all(&dir).unwrap();
         let wrapper = dir.join("fake-lsp.cmd");
         std::fs::write(&wrapper, "@echo off\r\n").unwrap();

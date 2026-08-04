@@ -1,4 +1,4 @@
-# Building intentdiff-lsp
+# Building intentumdiff-lsp
 
 Toolchain: **Rust 1.93.0**. The crates are standalone — build each from its own manifest:
 
@@ -9,5 +9,5 @@ cargo test  --manifest-path crates/lsp-server/Cargo.toml
 ```
 
 The server's engine dependency is a git dep on
-[intentdiff-core](https://github.com/buchochelliq-labs/intentdiff-core) pinned by tag; for a
+[intentumdiff-core](https://github.com/buchochelliq-labs/intentumdiff-core) pinned by tag; for a
 private clone set `CARGO_NET_GIT_FETCH_WITH_CLI=true`.

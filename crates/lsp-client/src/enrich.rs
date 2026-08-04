@@ -1,6 +1,6 @@
 //! Generic batch-hover enrichment (#100 S2 slice 3): the transport half of
-//! `TypeEnricher.enrich` (`src/intentdiff/lsp/enricher.py`), with the tree-aware target
-//! collection left to the caller (in intentdiff, the core's `SemanticNode` walker — this
+//! `TypeEnricher.enrich` (`src/intentumdiff/lsp/enricher.py`), with the tree-aware target
+//! collection left to the caller (in intentumdiff, the core's `SemanticNode` walker — this
 //! crate stays agnostic of any AST shape).
 //!
 //! Mirrors the Python semantics: `didOpen` → all hover queries concurrently under a

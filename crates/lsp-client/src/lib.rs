@@ -1,5 +1,5 @@
 //! Generic LSP 3.17 client building blocks (#100 S2), ported from
-//! `src/intentdiff/lsp/client.py`.
+//! `src/intentumdiff/lsp/client.py`.
 //!
 //! Slice 1 is **sans-IO**: the Content-Length framing codec and the JSON-RPC 2.0 message
 //! helpers, with the #88 reader caps enforced exactly as the Python client does. The codec

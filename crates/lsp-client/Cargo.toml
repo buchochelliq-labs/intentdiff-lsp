@@ -1,6 +1,6 @@
-# Generic LSP client crate (#100, A2.5 Surface S2): an intentdiff-AGNOSTIC Language Server
-# Protocol client, ported from src/intentdiff/lsp/client.py. Deliberately reusable by other
-# projects — nothing in here may know about SemanticNode or the intentdiff engine (the
+# Generic LSP client crate (#100, A2.5 Surface S2): an intentumdiff-AGNOSTIC Language Server
+# Protocol client, ported from src/intentumdiff/lsp/client.py. Deliberately reusable by other
+# projects — nothing in here may know about SemanticNode or the intentumdiff engine (the
 # enricher layer lives in the core). Extracted to its own repo at the split (#82).
 # Standalone package (excluded from the root workspace) so its [patch] section applies.
 #
@@ -10,7 +10,7 @@
 # use an in-process duplex peer — NO network.
 
 [package]
-name = "intentdiff-lsp-client"
+name = "intentumdiff-lsp-client"
 version = "0.1.0"
 edition = "2021"
 publish = false

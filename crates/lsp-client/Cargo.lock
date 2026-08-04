@@ -19,7 +19,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "intentdiff-lsp-client"
+name = "intentumdiff-lsp-client"
 version = "0.1.0"
 dependencies = [
  "serde_json",

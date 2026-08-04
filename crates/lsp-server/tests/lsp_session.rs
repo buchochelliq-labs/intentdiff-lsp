@@ -1,6 +1,6 @@
 //! End-to-end regression test for the native LSP server (#100 S3): spawn the built binary
 //! and drive a full editor session over stdio, asserting the same flow the manual smoke
-//! covered. Self-contained — reuses the `intentdiff-lsp-client` codec for its own framing,
+//! covered. Self-contained — reuses the `intentumdiff-lsp-client` codec for its own framing,
 //! shells out to `git` for the fixture, and needs no Python. Skips (passes with a printed
 //! note) when the bundled wasm parsers or `git` are unavailable, so a checkout without built
 //! wasm does not fail the suite.
@@ -11,15 +11,15 @@ use std::process::{Command, Stdio};
 use std::sync::mpsc;
 use std::time::Duration;
 
-use intentdiff_lsp_client::{encode_message, DecodeEvent, FrameDecoder};
+use intentumdiff_lsp_client::{encode_message, DecodeEvent, FrameDecoder};
 use serde_json::{json, Value};
 
-/// The dev-layout wasm dir (walk the crate's ancestors for `src/intentdiff/wasm`), verified
+/// The dev-layout wasm dir (walk the crate's ancestors for `src/intentumdiff/wasm`), verified
 /// by `parser_manifest.json`. `None` when the parsers have not been built.
 fn find_wasm_dir() -> Option<PathBuf> {
     let manifest = Path::new(env!("CARGO_MANIFEST_DIR"));
     for ancestor in manifest.ancestors() {
-        let dev = ancestor.join("src").join("intentdiff").join("wasm");
+        let dev = ancestor.join("src").join("intentumdiff").join("wasm");
         if dev.join("parser_manifest.json").is_file() {
             return Some(dev);
         }
@@ -63,7 +63,7 @@ fn unique_temp_dir() -> PathBuf {
         .duration_since(std::time::UNIX_EPOCH)
         .unwrap()
         .as_nanos();
-    let dir = std::env::temp_dir().join(format!("intentdiff-lsp-it-{}-{nanos}", std::process::id()));
+    let dir = std::env::temp_dir().join(format!("intentumdiff-lsp-it-{}-{nanos}", std::process::id()));
     std::fs::create_dir_all(&dir).expect("temp dir");
     dir
 }
@@ -154,7 +154,7 @@ fn native_lsp_server_serves_the_full_editor_flow() {
         eprintln!("skipping: git not available");
         return;
     }
-    let bin = env!("CARGO_BIN_EXE_intentdiff-lsp-server");
+    let bin = env!("CARGO_BIN_EXE_intentumdiff-lsp-server");
 
     let base = unique_temp_dir();
     let repo = base.join("repo");
@@ -185,7 +185,7 @@ fn native_lsp_server_serves_the_full_editor_flow() {
     let caps = &init["result"]["capabilities"];
     assert_eq!(caps["textDocumentSync"], 1);
     assert_eq!(caps["codeLensProvider"], json!({"resolveProvider": false}));
-    assert_eq!(init["result"]["serverInfo"]["name"], "intentdiff-lsp");
+    assert_eq!(init["result"]["serverInfo"]["name"], "intentumdiff-lsp");
     s.send(&json!({"jsonrpc": "2.0", "method": "initialized", "params": {}}));
 
     // 2. An edit pushes diagnostics (the modified value is still a MODIFICATION, not style).
@@ -208,9 +208,9 @@ fn native_lsp_server_serves_the_full_editor_flow() {
     let lens = s.recv_response(2);
     assert!(lens["result"].is_array(), "codeLens must return an array");
 
-    // 4. intentdiff/semanticDiff, same URI = live buffer vs HEAD.
+    // 4. intentumdiff/semanticDiff, same URI = live buffer vs HEAD.
     s.send(&json!({
-        "jsonrpc": "2.0", "id": 3, "method": "intentdiff/semanticDiff",
+        "jsonrpc": "2.0", "id": 3, "method": "intentumdiff/semanticDiff",
         "params": {"oldUri": a_uri, "newUri": a_uri},
     }));
     let same = &s.recv_response(3)["result"];
@@ -219,9 +219,9 @@ fn native_lsp_server_serves_the_full_editor_flow() {
         same["changes"].as_array().unwrap().iter().filter_map(|c| c["change_type"].as_str()).collect();
     assert!(same_types.contains(&"MODIFICATION"), "got {same_types:?}");
 
-    // 5. intentdiff/semanticDiff, two files = disk compare.
+    // 5. intentumdiff/semanticDiff, two files = disk compare.
     s.send(&json!({
-        "jsonrpc": "2.0", "id": 4, "method": "intentdiff/semanticDiff",
+        "jsonrpc": "2.0", "id": 4, "method": "intentumdiff/semanticDiff",
         "params": {"oldUri": a_uri, "newUri": b_uri},
     }));
     let two = &s.recv_response(4)["result"];
@@ -235,7 +235,7 @@ fn native_lsp_server_serves_the_full_editor_flow() {
         "file:///outside/evil.ts"
     };
     s.send(&json!({
-        "jsonrpc": "2.0", "id": 5, "method": "intentdiff/semanticDiff",
+        "jsonrpc": "2.0", "id": 5, "method": "intentumdiff/semanticDiff",
         "params": {"oldUri": a_uri, "newUri": outside},
     }));
     let guarded = &s.recv_response(5)["result"];

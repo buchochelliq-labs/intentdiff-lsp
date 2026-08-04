@@ -1,13 +1,13 @@
-# intentdiff-lsp architecture
+# intentumdiff-lsp architecture
 
 Two **standalone** crates, side by side:
 
-- **`crates/lsp-client`** — a generic (IntentDiff-agnostic) LSP client codec: message framing,
+- **`crates/lsp-client`** — a generic (IntentumDiff-agnostic) LSP client codec: message framing,
   request/response correlation, capability negotiation. No engine dependency.
-- **`crates/lsp-server`** — the native `intentdiff-lsp-server` binary: links
-  [intentdiff-core](https://github.com/buchochelliq-labs/intentdiff-core) in-process (the same
+- **`crates/lsp-server`** — the native `intentumdiff-lsp-server` binary: links
+  [intentumdiff-core](https://github.com/buchochelliq-labs/intentumdiff-core) in-process (the same
   engine handlers behind the
-  [C ABI](https://github.com/buchochelliq-labs/intentdiff-core/blob/main/docs/C_ABI.md))
+  [C ABI](https://github.com/buchochelliq-labs/intentumdiff-core/blob/main/docs/C_ABI.md))
   plus the client codec, serving semantic-diff-aware diagnostics and code lenses over LSP.
 
 ## Why no workspace

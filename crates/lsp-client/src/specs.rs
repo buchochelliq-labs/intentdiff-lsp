@@ -1,5 +1,5 @@
 //! Known-server specs + user config loading (#100 S2 slice 4), ported from
-//! `src/intentdiff/lsp/servers.py` and the pure decision half of `launcher.py`.
+//! `src/intentumdiff/lsp/servers.py` and the pure decision half of `launcher.py`.
 //!
 //! Three layers:
 //! - [`known_server_specs`]: the built-in auto-start table (data, value-for-value);
